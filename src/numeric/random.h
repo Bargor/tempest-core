@@ -33,10 +33,7 @@ namespace core {
     };
 
     constexpr multiply_with_carry_engine::multiply_with_carry_engine(const std::uint32_t s) noexcept
-        : m_seed(s), m_it(m_size - 1) {
-        m_state[0] = m_seed;
-        m_state[1] = m_seed + m_PHI;
-        m_state[2] = m_seed + m_PHI + m_PHI;
+        : m_seed(s), m_it(m_size - 1), m_state({m_seed, m_seed + m_PHI, m_seed + m_PHI + m_PHI}) {
         for (int i = 3; i < 4096; i++)
             m_state[i] = m_state[i - 3] ^ m_state[i - 2] ^ m_PHI ^ i;
     }
