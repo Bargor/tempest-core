@@ -20,7 +20,7 @@ namespace core {
         static constexpr result_type min() noexcept;
         static constexpr result_type max() noexcept;
         result_type operator()() noexcept;
-        void seed(const std::uint32_t s) noexcept;
+        constexpr void seed(const std::uint32_t s) noexcept;
 
     private:
         static constexpr std::uint32_t m_PHI = 0x9e3779b9;
@@ -34,13 +34,17 @@ namespace core {
 
     constexpr multiply_with_carry_engine::multiply_with_carry_engine(const std::uint32_t s) noexcept
         : m_seed(s), m_it(m_size - 1), m_state({m_seed, m_seed + m_PHI, m_seed + m_PHI + m_PHI}) {
-        for (int i = 3; i < 4096; i++)
+        for (std::int32_t i = 3; i < m_size; i++)
             m_state[i] = m_state[i - 3] ^ m_state[i - 2] ^ m_PHI ^ i;
     }
 
-    constexpr multiply_with_carry_engine::result_type multiply_with_carry_engine::min() noexcept { return 0; }
+    constexpr multiply_with_carry_engine::result_type multiply_with_carry_engine::min() noexcept {
+        return 0;
+    }
 
-    constexpr multiply_with_carry_engine::result_type multiply_with_carry_engine::max() noexcept { return 0xFFFFFFFF; }
+    constexpr multiply_with_carry_engine::result_type multiply_with_carry_engine::max() noexcept {
+        return 0xFFFFFFFF;
+    }
 
     TST_INLINE multiply_with_carry_engine::result_type multiply_with_carry_engine::operator()() noexcept {
         std::uint64_t t;
@@ -56,12 +60,12 @@ namespace core {
         return (m_state[m_it] = m_r - x);
     }
 
-    TST_INLINE void multiply_with_carry_engine::seed(const std::uint32_t s) noexcept {
+    constexpr void multiply_with_carry_engine::seed(const std::uint32_t s) noexcept {
         m_seed = s;
         m_state[0] = m_seed;
         m_state[1] = m_seed + m_PHI;
         m_state[2] = m_seed + m_PHI + m_PHI;
-        for (std::uint32_t i = 3; i < 4096; i++)
+        for (std::int32_t i = 3; i < m_size; i++)
             m_state[i] = m_state[i - 3] ^ m_state[i - 2] ^ m_PHI ^ i;
     }
 
