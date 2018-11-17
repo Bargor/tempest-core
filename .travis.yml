@@ -43,10 +43,7 @@ before_install:
 script:
 - gcc -v && g++ -v && cmake --version
 - clang --version
-- cmake ../build/cmake/.
-- sudo make -j2 && sudo make install
-- cd ../../../
 - mkdir build
 - cd build
-- cmake .. -DTEMPEST_BUILD_ALL=ON
+- cmake ..
 - make -j2
