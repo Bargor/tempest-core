@@ -22,7 +22,7 @@ before_build:
     - sh: cmake . 
 
 build:
-  project: $(APPVEYOR_BUILD_FOLDER)\Project.sln
+  project: $(APPVEYOR_BUILD_FOLDER)\$(APPVEYOR_PROJECT_NAME).sln
   
 test_script:
   - '%APPVEYOR_BUILD_FOLDER%\bin\exe\%CONFIGURATION%\core_test.exe'
