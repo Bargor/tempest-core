@@ -7,8 +7,6 @@ enable_testing()
 include_directories(${CMAKE_SOURCE_DIR}/libs/googletest/googlemock/include)
 include_directories(${CMAKE_SOURCE_DIR}/libs/googletest/googletest/include)
 
-include(${CMAKE_SOURCE_DIR}/GatherSources.cmake)
-
 #Find test files
 #TODO Make it better
 file(GLOB_RECURSE TEST_CODE "*_test.cpp")
@@ -35,9 +33,9 @@ set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OP
 
 if(UNIX)
 	FIND_PACKAGE(Threads)
-	target_link_libraries(core_test ${LIBRARY_OUTPUT_DIRECTORY}/libfmt.a ${LIBRARY_OUTPUT_DIRECTORY}/libgmock.a ${CMAKE_THREAD_LIBS_INIT})
+	target_link_libraries(core_test ${LIBRARY_OUTPUT_DIRECTORY}/libfmt.a ${LIBRARY_OUTPUT_DIRECTORY}/libgmock.a ${CMAKE_THREAD_LIBS_INIT} core)
 endif(UNIX)
 if(WIN32)
 	target_link_libraries(core_test debug ${LIBRARY_OUTPUT_DIRECTORY}/Debug/fmtd.lib debug ${LIBRARY_OUTPUT_DIRECTORY}/Debug/gmockd.lib
-		optimized ${LIBRARY_OUTPUT_DIRECTORY}/Release/fmt.lib optimized ${LIBRARY_OUTPUT_DIRECTORY}/Release/gmock.lib)
+		optimized ${LIBRARY_OUTPUT_DIRECTORY}/Release/fmt.lib optimized ${LIBRARY_OUTPUT_DIRECTORY}/Release/gmock.lib core)
 endif(WIN32)

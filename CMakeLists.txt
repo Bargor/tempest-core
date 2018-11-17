@@ -73,5 +73,7 @@ endif(WIN32)
 include_directories(${INCLUDE_PATHS})
 
 add_subdirectory(libs/fmt)
-add_subdirectory(libs/googletest)
+add_subdirectory(src)
+
+add_subdirectory(libs/googletest ${LIBRARY_OUTPUT_DIRECTORY})
 add_subdirectory(test/unit)
