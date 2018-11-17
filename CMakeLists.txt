@@ -61,8 +61,8 @@ set(RELWITHDEBINFO_COMPILE_DEFINITIONS ${TEMPEST_COMPILE_DEFINITIONS} NDEBUG)
 set(RELEASE_COMPILE_DEFINITIONS ${TEMPEST_COMPILE_DEFINITIONS} NDEBUG)
 set(DEBUG_COMPILE_DEFINITIONS ${TEMPEST_COMPILE_DEFINITIONS})
 
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/exe)
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/libs)
+set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/exe)
+set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/libs)
 
 set(INCLUDE_PATHS ${CMAKE_SOURCE_DIR}/libs/fmt ${CMAKE_SOURCE_DIR}/src)
 
@@ -70,8 +70,8 @@ if(WIN32)
 	set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
 endif(WIN32)
 
-add_subdirectory(libs/fmt)
-
 include_directories(${INCLUDE_PATHS})
 
+add_subdirectory(libs/fmt)
+add_subdirectory(libs/googletest)
 add_subdirectory(test/unit)
