@@ -25,7 +25,8 @@ namespace core {
     private:
         static constexpr std::uint32_t m_PHI = 0x9e3779b9;
         static constexpr std::int64_t m_maxSeed = 18782;
-        static constexpr std::uint32_t m_r = 0xffffffe;
+        static constexpr std::uint32_t m_r = 0xfffffffe;
+        static constexpr std::uint32_t m_c = 362436;
         static constexpr std::uint32_t m_size = 4096U;
         std::array<std::uint32_t, m_size> m_state;
         std::uint32_t m_seed;
