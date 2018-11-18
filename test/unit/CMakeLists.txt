@@ -14,7 +14,7 @@ file(GLOB_RECURSE TEST_CODE "*_test.cpp")
 set(TEST_RUNNER test_runner.cpp)
 set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
 
-source_group("Tests" FILES ${TEST_SRCS})
+source_group("tests" FILES ${TEST_SRCS})
 
 add_executable (core_test ${TEST_SRCS} ${TEMPEST_CODE})
 add_test(NAME unit_test COMMAND core_test)
@@ -33,9 +33,9 @@ set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OP
 
 if(UNIX)
 	FIND_PACKAGE(Threads)
-	target_link_libraries(core_test ${LIBRARY_OUTPUT_DIRECTORY}/libfmt.a ${LIBRARY_OUTPUT_DIRECTORY}/libgmock.a ${CMAKE_THREAD_LIBS_INIT} core)
+	target_link_libraries(core_test ${LIBRARY_OUTPUT_PATH}/libfmt.a ${LIBRARY_OUTPUT_PATH}/libgmock.a ${CMAKE_THREAD_LIBS_INIT})
 endif(UNIX)
 if(WIN32)
-	target_link_libraries(core_test debug ${LIBRARY_OUTPUT_DIRECTORY}/Debug/fmtd.lib debug ${LIBRARY_OUTPUT_DIRECTORY}/Debug/gmockd.lib
-		optimized ${LIBRARY_OUTPUT_DIRECTORY}/Release/fmt.lib optimized ${LIBRARY_OUTPUT_DIRECTORY}/Release/gmock.lib core)
+	target_link_libraries(core_test debug ${LIBRARY_OUTPUT_PATH}/Debug/gmockd.lib
+		optimized ${LIBRARY_OUTPUT_PATH}/Release/fmt.lib optimized ${LIBRARY_OUTPUT_PATH}/Release/gmock.lib)
 endif(WIN32)
