@@ -33,7 +33,7 @@ set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OP
 
 if(UNIX)
 	FIND_PACKAGE(Threads)
-	target_link_libraries(core_test ${LIBRARY_OUTPUT_PATH}/libfmt.a ${LIBRARY_OUTPUT_PATH}/libgmock.a ${CMAKE_THREAD_LIBS_INIT})
+	target_link_libraries(core_test ${LIBRARY_OUTPUT_PATH}/libfmt.a ${LIBRARY_OUTPUT_PATH}/libgmock.a ${LIBRARY_OUTPUT_PATH}/libgtest.a ${CMAKE_THREAD_LIBS_INIT})
 endif(UNIX)
 if(WIN32)
 	target_link_libraries(core_test debug ${LIBRARY_OUTPUT_PATH}/Debug/gmockd.lib
