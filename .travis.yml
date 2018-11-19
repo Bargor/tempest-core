@@ -1,0 +1,50 @@
+language: cpp
+dist: xenial
+sudo: required
+
+notifications:
+  email:
+    on_success: never # default: change
+    on_failure: always # default: always
+
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-8
+            - g++-8
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+    # works on Trusty
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+          packages:
+            - clang-7
+            - libc++-7-dev
+            - libc++abi-7-dev
+            - lld-7
+            - llvm-7
+            - llvm-7-dev
+            - llvm-7-runtime
+      env:
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7"
+before_install:
+    - eval "${MATRIX_EVAL}"
+# Build steps
+
+script:
+- gcc -v && g++ -v && cmake --version
+- clang --version
+- mkdir build
+- cd build
+- cmake ..
+- make -j2
+- ./exe/core_test

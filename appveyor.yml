@@ -1,0 +1,28 @@
+# version format
+version: 0.0.1.{build}
+ 
+environment:
+  matrix:
+  - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    GENERATOR: "Visual Studio 15 2017 Win64"    
+
+platform:
+  - x64
+ 
+configuration:
+  - Release
+  - Debug
+
+install:
+    - git submodule update --init --recursive
+
+before_build:
+    - cmd: echo %GENERATOR%
+    - cmd: cmake -G"%GENERATOR%" . 
+    - sh: cmake . 
+
+build:
+  project: $(APPVEYOR_BUILD_FOLDER)\$(APPVEYOR_PROJECT_NAME).sln
+  
+test_script:
+  - '%APPVEYOR_BUILD_FOLDER%\exe\%CONFIGURATION%\core_test.exe'
