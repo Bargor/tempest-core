@@ -43,11 +43,10 @@ namespace core {
         index_type frontPos = m_front.load(std::memory_order_relaxed);
         index_type newFront = next_pos(frontPos);
 
-        if (newFront == m_back.load(std::memory_order_relaxed)) // queue full can't push
+        if (newFront == m_back.load(std::memory_order_acquire)) // queue full can't push
             return false;
 
         m_buffer[frontPos] = element;
-
         m_front.store(newFront, std::memory_order_release);
 
         return true;
@@ -58,16 +57,11 @@ namespace core {
         index_type backPos = m_back.load(std::memory_order_relaxed);
         index_type frontPos = m_front.load(std::memory_order_acquire);
 
-        // fence here
-
         if (frontPos == backPos) // queue empty, nother to read
             return std::nullopt;
 
         auto value = m_buffer[backPos];
-
         m_back.store(next_pos(backPos), std::memory_order_release);
-
-        // fence here
 
         return value;
     }

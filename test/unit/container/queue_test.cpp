@@ -108,8 +108,11 @@ TEST(spsc_queue, test_push_pop_interleaved_2) {
     auto push_queue = [&]() {
         notifier.wait();
 
-        for (int i = 0; i < 2 * size; ++i) {
-            EXPECT_TRUE(queue.try_push(i));
+        std::int32_t count = 0;
+
+        while (count < 2 * size) {
+            auto res = queue.try_push(count);
+            if (res) ++count;
         }
     };
 

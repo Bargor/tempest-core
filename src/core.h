@@ -3,5 +3,6 @@
 
 #pragma once
 
-#include <platform.h>
+#include <assert.h>
 #include <macros.h>
+#include <platform.h>
