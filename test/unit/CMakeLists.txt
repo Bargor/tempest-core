@@ -34,8 +34,8 @@ set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OP
 target_link_libraries(core_test PRIVATE core)
 
 if(UNIX)
-	target_link_libraries(core_test ${LIBRARY_OUTPUT_PATH}/libgmock.a ${LIBRARY_OUTPUT_PATH}/libgtest.a)
+	target_link_libraries(core_test PRIVATE ${LIBRARY_OUTPUT_PATH}/libgmock.a ${LIBRARY_OUTPUT_PATH}/libgtest.a)
 endif(UNIX)
 if(WIN32)
-	target_link_libraries(core_test debug ${LIBRARY_OUTPUT_PATH}/Debug/gmockd.lib optimized ${LIBRARY_OUTPUT_PATH}/Release/gmock.lib)
+	target_link_libraries(core_test PRIVATE debug ${LIBRARY_OUTPUT_PATH}/Debug/gmockd.lib optimized ${LIBRARY_OUTPUT_PATH}/Release/gmock.lib)
 endif(WIN32)
