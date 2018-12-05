@@ -27,15 +27,15 @@ target_compile_options(core_test PUBLIC "$<$<CONFIG:DEBUG>:${DEBUG_COMPILE_OPTIO
 target_compile_options(core_test PUBLIC "$<$<CONFIG:RELEASE>:${RELEASE_COMPILE_OPTIONS}>")
 target_compile_options(core_test PUBLIC "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEBINFO_COMPILE_OPTIONS}>")
 
-add_dependencies(core_test gmock fmt)
+add_dependencies(core_test gmock)
 
-set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OPTIONS}" LINK_FLAGS_DEBUG 		"${DEBUG_LINK_OPTIONS}" LINKER_LANGUAGE CXX)
+set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OPTIONS}" LINK_FLAGS_DEBUG "${DEBUG_LINK_OPTIONS}" LINKER_LANGUAGE CXX)
+
+target_link_libraries(core_test PRIVATE core)
 
 if(UNIX)
-	FIND_PACKAGE(Threads)
-	target_link_libraries(core_test ${LIBRARY_OUTPUT_PATH}/libfmt.a ${LIBRARY_OUTPUT_PATH}/libgmock.a ${LIBRARY_OUTPUT_PATH}/libgtest.a ${CMAKE_THREAD_LIBS_INIT})
+	target_link_libraries(core_test ${LIBRARY_OUTPUT_PATH}/libgmock.a ${LIBRARY_OUTPUT_PATH}/libgtest.a)
 endif(UNIX)
 if(WIN32)
-	target_link_libraries(core_test debug ${LIBRARY_OUTPUT_PATH}/Debug/gmockd.lib
-		optimized ${LIBRARY_OUTPUT_PATH}/Release/fmt.lib optimized ${LIBRARY_OUTPUT_PATH}/Release/gmock.lib)
+	target_link_libraries(core_test debug ${LIBRARY_OUTPUT_PATH}/Debug/gmockd.lib optimized ${LIBRARY_OUTPUT_PATH}/Release/gmock.lib)
 endif(WIN32)
