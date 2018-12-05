@@ -9,7 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/libs/googletest/googletest/include)
 
 #Find test files
 #TODO Make it better
-file(GLOB_RECURSE TEST_CODE "*_test.cpp")
+include(GatherTestSources.cmake)
 
 set(TEST_RUNNER test_runner.cpp)
 set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
