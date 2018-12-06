@@ -71,10 +71,6 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/libs)
 set(ARCHIVE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/libs)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/exe)
 
-set(INCLUDE_PATHS ${CMAKE_SOURCE_DIR}/libs/fmt)
-
-include_directories(${INCLUDE_PATHS})
-
 #Build lib
 
 add_subdirectory(libs/fmt)
@@ -85,6 +81,5 @@ add_subdirectory(src)
 if(WIN32)
 	set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
 endif(WIN32)
-
-add_subdirectory(libs/googletest)
+include(CTest)
 add_subdirectory(test/unit)

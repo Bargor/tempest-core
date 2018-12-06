@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include <time/timer.h>
+#include <fmt/printf.h>
 
 using namespace tst::core;
 using namespace std;
@@ -23,7 +24,7 @@ TEST(Timer, timerStartStop) {
 
 TEST(Timer, timerResolution) {
     timer timer;
-    printf("%jd %jd %f\n",
+    fmt::printf("%jd %jd %f\n",
            chrono::high_resolution_clock::period::num,
            chrono::high_resolution_clock::period::den,
            (double)chrono::high_resolution_clock::period::num / chrono::high_resolution_clock::period::den);
