@@ -41,5 +41,5 @@ set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OP
 target_link_libraries(core_test PRIVATE core gmock)
 
 if(UNIX)
-	target_link_libraries(core_test PRIVATE gmock gtest)
+	target_link_libraries(core_test PRIVATE gtest)
 endif(UNIX)
