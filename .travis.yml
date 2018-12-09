@@ -18,7 +18,17 @@ matrix:
             - gcc-8
             - g++-8
       env:
-        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8"
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" BUILD_TYPE=Debug
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-8
+            - g++-8
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" BUILD_TYPE=Release
     # works on Trusty
     - os: linux
       addons:
@@ -35,7 +45,25 @@ matrix:
             - llvm-7-dev
             - llvm-7-runtime
       env:
-        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7"
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7" BUILD_TYPE=Debug
+        - EXTRA_FLAGS="-stdlib=libc++"
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+          packages:
+            - clang-7
+            - libc++-7-dev
+            - libc++abi-7-dev
+            - lld-7
+            - llvm-7
+            - llvm-7-dev
+            - llvm-7-runtime
+      env:
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7" BUILD_TYPE=Release
+        - EXTRA_FLAGS="-stdlib=libc++"
 before_install:
     - eval "${MATRIX_EVAL}"
 # Build steps
@@ -45,6 +73,6 @@ script:
 - clang --version
 - mkdir build
 - cd build
-- cmake ..
+- cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_CXX_FLAGS=${EXTRA_FLAGS}
 - make -j2
 - ./exe/core_test

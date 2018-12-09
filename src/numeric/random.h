@@ -3,10 +3,11 @@
 
 #pragma once
 
+#include <core.h>
+#include <platform.h>
+
 #include <array>
-#include <core>
 #include <cstdint>
-#include <platform>
 #include <random>
 
 namespace tst {

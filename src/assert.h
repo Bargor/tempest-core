@@ -2,7 +2,7 @@
 // Author: Karol Kontny
 
 #pragma once
-#include <platform>
+#include <platform.h>
 
 #include <cstdio>
 #include <cstdlib>

@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include <core>
-#include <platform>
-#include <assert>
+#include <core.h>
+#include <platform.h>
+#include <assert.h>
 
 
 #include <chrono>

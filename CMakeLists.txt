@@ -18,6 +18,11 @@ message(${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}:${VERSION_REVISION})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(BUILD_THREAD_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
+option(BUILD_ADDRESS_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
+option(BUILD_MEMORY_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
+option(BUILD_LEAK_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
+
 #Compiler specific options
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	#General Win compile options
@@ -34,7 +39,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 	set(RELWITHDEBINFO_LINK_OPTIONS ${TEMPEST_LINK_OPTIONS} /LTCG)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	message("GCC compiler")
-	set(TEMPEST_COMPILE_OPTIONS -Wall -Werror -W -std=c++17)
+	set(TEMPEST_COMPILE_OPTIONS -Wall -Werror -W -Wextra -pedantic-errors)
 	set(DEBUG_COMPILE_OPTIONS ${TEMPEST_COMPILE_OPTIONS} -O0)
 	set(RELEASE_COMPILE_OPTIONS ${TEMPEST_COMPILE_OPTIONS} -O3 -funsafe-loop-optimizations -m64 -march=core2 -mfpmath=sse)
 	set(RELWITHDEBINFO_COMPILE_OPTIONS ${TEMPEST_COMPILE_OPTIONS} -O3 -funsafe-loop-optimizations -m64 -march=core2 -mfpmath=sse)
@@ -45,12 +50,12 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 	set(RELWITHDEBINFO_LINK_OPTIONS ${TEMPEST_LINK_OPTIONS})
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 	message("Clang compiler")
-	set(TEMPEST_COMPILE_OPTIONS -Wall -Werror -W -stdlib=libc++ -std=c++17)
+	set(TEMPEST_COMPILE_OPTIONS -Wall -Werror -W -Wextra -pedantic-errors)
 	set(DEBUG_COMPILE_OPTIONS ${TEMPEST_COMPILE_OPTIONS} -O0)
 	set(RELEASE_COMPILE_OPTIONS ${TEMPEST_COMPILE_OPTIONS} -O3 -m64 -march=core2 -mfpmath=sse)
 	set(RELWITHDEBINFO_COMPILE_OPTIONS ${TEMPEST_COMPILE_OPTIONS} -O3 -m64 -march=core2 -mfpmath=sse)
 	#Clang link options
-	set(TEMPEST_LINK_OPTIONS -stdlib=libc++ -lc++abi)
+	set(TEMPEST_LINK_OPTIONS)
 	set(DEBUG_LINK_OPTIONS ${TEMPEST_LINK_OPTIONS})
 	set(RELEASE_LINK_OPTIONS ${TEMPEST_LINK_OPTIONS})
 	set(RELWITHDEBINFO_LINK_OPTIONS ${TEMPEST_LINK_OPTIONS})
@@ -61,14 +66,10 @@ set(RELWITHDEBINFO_COMPILE_DEFINITIONS ${TEMPEST_COMPILE_DEFINITIONS} NDEBUG)
 set(RELEASE_COMPILE_DEFINITIONS ${TEMPEST_COMPILE_DEFINITIONS} NDEBUG)
 set(DEBUG_COMPILE_DEFINITIONS ${TEMPEST_COMPILE_DEFINITIONS})
 
-# set(RUNTIME_OUTPUT_PATH ${CMAKE_BINARY_DIR}/exe)
+set(RUNTIME_OUTPUT_PATH ${CMAKE_BINARY_DIR}/exe)
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/libs)
 set(ARCHIVE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/libs)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/exe)
-
-set(INCLUDE_PATHS ${CMAKE_SOURCE_DIR}/libs/fmt ${CMAKE_SOURCE_DIR}/src)
-
-include_directories(${INCLUDE_PATHS})
 
 #Build lib
 
@@ -80,6 +81,5 @@ add_subdirectory(src)
 if(WIN32)
 	set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
 endif(WIN32)
-
-add_subdirectory(libs/googletest)
+include(CTest)
 add_subdirectory(test/unit)
