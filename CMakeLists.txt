@@ -72,14 +72,20 @@ set(ARCHIVE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/libs)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/exe)
 
 #Build lib
-
 add_subdirectory(libs/fmt)
 add_subdirectory(src)
 
 #Build tests
-
-if(WIN32)
-	set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
-endif(WIN32)
-include(CTest)
-add_subdirectory(test/unit)
+if(CORE_BUILD_TESTS)
+	if(WIN32)
+		set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
+		set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Google benchmark tests")
+	endif(WIN32)
+	include(CTest)
+	
+	add_subdirectory(libs/googletest)
+	add_subdirectory(libs/benchmark)
+		
+	add_subdirectory(test/unit)
+	add_subdirectory(test/perf)
+endif(CORE_BUILD_TESTS)

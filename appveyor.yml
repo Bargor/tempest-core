@@ -18,7 +18,7 @@ install:
 
 before_build:
     - cmd: echo %GENERATOR%
-    - cmd: cmake -G"%GENERATOR%" . 
+    - cmd: cmake -G"%GENERATOR%" . -DCORE_BUILD_TESTS=ON
     - sh: cmake . 
 
 build:
