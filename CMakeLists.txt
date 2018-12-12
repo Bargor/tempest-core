@@ -79,8 +79,10 @@ add_subdirectory(src)
 if(CORE_BUILD_TESTS)
 	if(WIN32)
 		set(gtest_force_shared_crt ON CACHE BOOL "Use shared (DLL) run-time lib even when Google Test is built as static lib.")
-		set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Google benchmark tests")
 	endif(WIN32)
+	
+	set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "Google benchmark tests")
+	
 	include(CTest)
 	
 	add_subdirectory(libs/googletest)
