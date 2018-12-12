@@ -22,7 +22,7 @@ foreach(SOURCE_FILE ${TEST_CODE})
 	#Link with needed libs
 	if(UNIX)
 		FIND_PACKAGE(Threads)
-		target_link_libraries(${TEST_NAME} ${CMAKE_THREAD_LIBS_INIT})
+		target_link_libraries(${TEST_NAME} PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 	endif(UNIX)
 
 endforeach(SOURCE_FILE)
