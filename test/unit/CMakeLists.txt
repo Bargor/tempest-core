@@ -21,9 +21,11 @@ include(GatherTestSources.cmake)
 set(TEST_RUNNER test_runner.cpp)
 set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
 
+message(${TEST_CODE})
+
 source_group("tests" FILES ${TEST_SRCS})
 
-add_executable (core_test ${TEST_SRCS} ${TEMPEST_CODE})
+add_executable (core_test ${TEST_SRCS})
 add_test(NAME unit_test COMMAND core_test)
 
 target_compile_definitions(core_test PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_COMPILE_DEFINITIONS}>")
