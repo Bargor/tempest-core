@@ -22,7 +22,7 @@ namespace core {
 
             for (auto _ : state) {
 
-                while (count < 100 * state.range(0)) {
+                while (count < state.range(0)) {
                     auto res = queue.try_push(count);
                     if (res) ++count;
                 }
@@ -34,7 +34,7 @@ namespace core {
             std::int32_t count = 0;
 
             for (auto _ : state) {
-                while (count < 100 * state.range(0)) {
+                while (count < state.range(0)) {
                     auto res = queue.try_pop();
                     if (res) {
                         count++;
@@ -60,7 +60,7 @@ namespace core {
             std::int32_t count = 0;
 
             for (auto _ : state) {
-                while (count < 100 * state.range(0)) {
+                while (count < state.range(0)) {
                     spin.lock();
                     queue.push(count);
                     spin.unlock();
@@ -73,7 +73,7 @@ namespace core {
             std::int32_t count = 0;
 
             for (auto _ : state) {
-                while (count < 100 * state.range(0)) {
+                while (count < state.range(0)) {
                     if (!queue.empty())
                     {
                         spin.lock();
@@ -94,8 +94,8 @@ namespace core {
         state.SetBytesProcessed(int64_t(state.iterations()) * int64_t(state.range(0)));
     }
 
-    BENCHMARK(BM_spinlock_queue)->RangeMultiplier(2)->Range(size, 8 << 14)->Threads(2);
-    BENCHMARK(BM_spsc_queue)->RangeMultiplier(2)->Range(size, 8 << 14)->Threads(2);
+    BENCHMARK(BM_spinlock_queue)->RangeMultiplier(2)->Range(size, 8 << 18)->Threads(2);
+    BENCHMARK(BM_spsc_queue)->RangeMultiplier(2)->Range(size, 8 << 18)->Threads(2);
 
 }
 }
