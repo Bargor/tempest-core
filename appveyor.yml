@@ -26,3 +26,4 @@ build:
   
 test_script:
   - '%APPVEYOR_BUILD_FOLDER%\exe\%CONFIGURATION%\core_test.exe'
+  - '%APPVEYOR_BUILD_FOLDER%\exe\%CONFIGURATION%\queue_test.exe'
