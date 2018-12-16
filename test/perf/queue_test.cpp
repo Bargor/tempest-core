@@ -79,7 +79,7 @@ namespace core {
                         spin.lock();
                         queue.pop();
                         spin.unlock();
-                        count++;
+                        ++count;
                     }
                 }
             }
