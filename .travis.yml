@@ -113,7 +113,7 @@ script:
 - clang --version
 - mkdir build
 - cd build
-- cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_CXX_FLAGS=${EXTRA_FLAGS} -DCORE_BUILD_TESTS=ON
+- cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_CXX_FLAGS="${EXTRA_FLAGS}" -DCORE_BUILD_TESTS=ON
 - make -j2
 - ./exe/core_test
 - if [ "${BUILD_TYPE}" == "Release" ]; then
