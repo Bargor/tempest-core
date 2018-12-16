@@ -9,47 +9,47 @@
 using namespace tst::core;
 
 TEST(spsc_queue, test_push_than_pop) {
-    constexpr std::size_t size = 31;
+    constexpr std::int32_t size = 31;
 
     spsc_queue<std::int32_t, size> queue;
 
-    for (int i = 0; i < size; ++i) {
+    for (std::int32_t i = 0; i < size; ++i) {
         EXPECT_TRUE(queue.try_push(i));
     }
 
-    for (int i = 0; i < size; ++i) {
+    for (std::int32_t i = 0; i < size; ++i) {
         auto res = queue.try_pop();
         EXPECT_EQ(i, res.value());
     }
 }
 
 TEST(spsc_queue, test_push_fail) {
-    constexpr std::size_t size = 31;
+    constexpr std::int32_t size = 31;
 
     spsc_queue<std::int32_t, size> queue;
 
-    for (int i = 0; i < size; ++i) {
+    for (std::int32_t i = 0; i < size; ++i) {
         EXPECT_TRUE(queue.try_push(i));
     }
 
     EXPECT_FALSE(queue.try_push(32));
 
-    for (int i = 0; i < size; ++i) {
+    for (std::int32_t i = 0; i < size; ++i) {
         auto res = queue.try_pop();
         EXPECT_EQ(i, res.value());
     }
 }
 
 TEST(spsc_queue, test_pop_fail) {
-    constexpr std::size_t size = 32;
+    constexpr std::int32_t size = 32;
 
     spsc_queue<std::int32_t, size> queue;
 
-    for (int i = 0; i < size; ++i) {
+    for (std::int32_t i = 0; i < size; ++i) {
         EXPECT_TRUE(queue.try_push(i));
     }
 
-    for (int i = 0; i < size; ++i) {
+    for (std::int32_t i = 0; i < size; ++i) {
         auto res = queue.try_pop();
         EXPECT_EQ(i, res.value());
     }
@@ -58,7 +58,7 @@ TEST(spsc_queue, test_pop_fail) {
 }
 
 TEST(spsc_queue, test_push_pop_interleaved) {
-    constexpr std::size_t size = 1023;
+    constexpr std::int32_t size = 1023;
 
     spsc_queue<std::int32_t, size> queue;
 
@@ -69,7 +69,7 @@ TEST(spsc_queue, test_push_pop_interleaved) {
     auto push_queue = [&]() {
         notifier.wait();
 
-        for (int i = 0; i < size; ++i) {
+        for (std::int32_t i = 0; i < size; ++i) {
             EXPECT_TRUE(queue.try_push(i));
         }
     };
@@ -97,7 +97,7 @@ TEST(spsc_queue, test_push_pop_interleaved) {
 }
 
 TEST(spsc_queue, test_push_pop_interleaved_2) {
-    constexpr std::size_t size = 1023;
+    constexpr std::int32_t size = 1023;
 
     spsc_queue<std::int32_t, size> queue;
 
