@@ -16,9 +16,8 @@ namespace core {
 
         spsc_queue<std::int32_t, size> queue;
 
-        auto push_queue = [&]() {
-
-            std::int32_t count = 0;
+		if (state.thread_index == 0) {
+	        std::int32_t count = 0;
 
             for (auto _ : state) {
 
@@ -27,11 +26,8 @@ namespace core {
                     if (res) ++count;
                 }
             }
-        };
-
-        auto pop_queue = [&]() {
-
-            std::int32_t count = 0;
+		} else {
+			std::int32_t count = 0;
 
             for (auto _ : state) {
                 while (count < state.range(0)) {
@@ -41,13 +37,7 @@ namespace core {
                     }
                 }
             }
-        };
-
-        std::thread producer(push_queue);
-        std::thread consumer(pop_queue);
-
-        producer.join();
-        consumer.join();
+		}
         
         state.SetBytesProcessed(int64_t(state.iterations()) * int64_t(state.range(0)));
     }
@@ -56,10 +46,10 @@ namespace core {
         std::queue<std::int32_t> queue;
         spinlock spin;
 
-        auto push_queue = [&]() {
-            std::int32_t count = 0;
-
-            for (auto _ : state) {
+		if (state.thread_index == 0) {
+			std::int32_t count = 0;
+			
+			for (auto _ : state) {
                 while (count < state.range(0)) {
                     spin.lock();
                     queue.push(count);
@@ -67,10 +57,8 @@ namespace core {
                     ++count;
                 }
             }
-        };
-
-        auto pop_queue = [&]() {
-            std::int32_t count = 0;
+		} else {
+			std::int32_t count = 0;
 
             for (auto _ : state) {
                 while (count < state.range(0)) {
@@ -83,13 +71,7 @@ namespace core {
                     }
                 }
             }
-        };
-
-        std::thread producer(push_queue);
-        std::thread consumer(pop_queue);
-
-        producer.join();
-        consumer.join();
+		}
 
         state.SetBytesProcessed(int64_t(state.iterations()) * int64_t(state.range(0)));
     }
