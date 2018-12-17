@@ -3,8 +3,6 @@
 
 enable_testing()
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/libs/googletest ${LIBRARY_OUTPUT_PATH})
-
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
     gmock_build_tests gtest_build_samples gtest_build_tests
@@ -23,9 +21,11 @@ include(GatherTestSources.cmake)
 set(TEST_RUNNER test_runner.cpp)
 set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
 
+message(${TEST_CODE})
+
 source_group("tests" FILES ${TEST_SRCS})
 
-add_executable (core_test ${TEST_SRCS} ${TEMPEST_CODE})
+add_executable (core_test ${TEST_SRCS})
 add_test(NAME tst.core_unit_test COMMAND core_test)
 
 target_compile_definitions(core_test PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_COMPILE_DEFINITIONS}>")
@@ -41,5 +41,5 @@ set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OP
 target_link_libraries(core_test PRIVATE core gmock)
 
 if(UNIX)
-	target_link_libraries(core_test PRIVATE gmock gtest)
+	target_link_libraries(core_test PRIVATE gtest)
 endif(UNIX)
