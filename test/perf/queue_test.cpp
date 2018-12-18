@@ -27,7 +27,7 @@ namespace core {
                 while (count < state.range(0)) {
                     auto res = queue.try_pop();
                     if (res) {
-                        count++;
+                        ++count;
                     }
                 }
             }
