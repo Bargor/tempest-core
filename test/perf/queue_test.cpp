@@ -13,7 +13,7 @@ namespace core {
 	
 	struct s512 {
 		std::int64_t arr[8];
-	}
+	};
 
     constexpr std::size_t size = 1023;
 
