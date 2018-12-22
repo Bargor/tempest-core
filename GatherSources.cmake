@@ -11,5 +11,6 @@ list(APPEND TEMPEST_CODE ${CMAKE_SOURCE_DIR}/src/memory/frame_allocator.h)
 list(APPEND TEMPEST_CODE ${CMAKE_SOURCE_DIR}/src/numeric/random.h)
 list(APPEND TEMPEST_CODE ${CMAKE_SOURCE_DIR}/src/time/timer.h)
 list(APPEND TEMPEST_CODE ${CMAKE_SOURCE_DIR}/src/util/variant.h)
+list(APPEND TEMPEST_CODE ${CMAKE_SOURCE_DIR}/src/util/bitpack.h)
 
 set(TEMPEST_CODE ${TEMPEST_CODE} PARENT_SCOPE)
