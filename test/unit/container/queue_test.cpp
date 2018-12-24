@@ -137,3 +137,141 @@ TEST(spsc_queue, test_push_pop_interleaved_2) {
     producer.join();
     consumer.join();
 }
+
+TEST(spmc_queue, test_push_than_pop) {
+    constexpr std::int32_t size = 31;
+
+    spmc_queue<std::int32_t, size> queue;
+
+    for (std::int32_t i = 0; i < size; ++i) {
+        EXPECT_TRUE(queue.try_push(i));
+    }
+
+    for (std::int32_t i = 0; i < size; ++i) {
+        auto res = queue.try_pop();
+        EXPECT_EQ(i, res.value());
+    }
+}
+
+TEST(spmc_queue, test_push_fail) {
+    constexpr std::int32_t size = 31;
+
+    spmc_queue<std::int32_t, size> queue;
+
+    for (std::int32_t i = 0; i < size; ++i) {
+        EXPECT_TRUE(queue.try_push(i));
+    }
+
+    EXPECT_FALSE(queue.try_push(32));
+
+    for (std::int32_t i = 0; i < size; ++i) {
+        auto res = queue.try_pop();
+        EXPECT_EQ(i, res.value());
+    }
+}
+
+TEST(spmc_queue, test_pop_fail) {
+    constexpr std::int32_t size = 32;
+
+    spmc_queue<std::int32_t, size> queue;
+
+    for (std::int32_t i = 0; i < size; ++i) {
+        EXPECT_TRUE(queue.try_push(i));
+    }
+
+    for (std::int32_t i = 0; i < size; ++i) {
+        auto res = queue.try_pop();
+        EXPECT_EQ(i, res.value());
+    }
+
+    EXPECT_FALSE(queue.try_pop());
+}
+
+TEST(spmc_queue, test_push_pop_interleaved) {
+    constexpr std::int32_t size = 1023;
+
+    spmc_queue<std::int32_t, size> queue;
+
+    std::atomic<std::int32_t> count = 0;
+
+    std::promise<void> enabler;
+
+    auto notifier = enabler.get_future().share();
+
+    auto push_queue = [&]() {
+        notifier.wait();
+
+        for (std::int32_t i = 0; i < size; ++i) {
+            EXPECT_TRUE(queue.try_push(i));
+        }
+    };
+
+    auto pop_queue = [&]() {
+        notifier.wait();
+
+        auto last = 0;
+        while (count < size) {
+            auto res = queue.try_pop();
+            if (res) {
+                EXPECT_LE(last, res.value());
+                last = res.value();
+                count++;
+            }
+        }
+    };
+
+    std::thread producer(push_queue);
+    std::thread consumer_1(pop_queue);
+    std::thread consumer_2(pop_queue);
+
+    enabler.set_value();
+
+    producer.join();
+    consumer_1.join();
+    consumer_2.join();
+}
+
+TEST(spmc_queue, test_push_pop_interleaved_2) {
+    constexpr std::int32_t size = 1023;
+
+    spmc_queue<std::int32_t, size> queue;
+
+    std::promise<void> enabler;
+
+    std::atomic<std::int32_t> count = 0;
+
+    auto notifier = enabler.get_future().share();
+
+    auto push_queue = [&]() {
+        notifier.wait();
+
+        while (count < 2 * size) {
+            auto res = queue.try_push(count);
+            if (res) ++count;
+        }
+    };
+
+    auto pop_queue = [&]() {
+        notifier.wait();
+
+        auto last = 0;
+        while (count < 2 * size) {
+            auto res = queue.try_pop();
+            if (res) {
+                EXPECT_LE(last, res.value());
+                last = res.value();
+                count++;
+            }
+        }
+    };
+
+    std::thread producer(push_queue);
+    std::thread consumer_1(pop_queue);
+    std::thread consumer_2(pop_queue);
+
+    enabler.set_value();
+
+    producer.join();
+    consumer_1.join();
+    consumer_2.join();
+}
