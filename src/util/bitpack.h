@@ -19,7 +19,7 @@ namespace core {
     }
     
     template<typename FullType, typename HalfType,
-             typename = std::enable_if_t < std::is_integral_v<FullType>>,
+             typename = std::enable_if_t<std::is_integral_v<FullType>>,
              typename = std::enable_if_t<std::is_integral_v<HalfType>>>
     HalfType get_high_bits(FullType num) {
 
