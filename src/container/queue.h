@@ -57,7 +57,7 @@ namespace core {
 
     template<typename T, size_t Size>
     TST_INLINE void spsc_queue<T, Size>::push(const T& element) noexcept {
-        index_type backPos = m_front.load(std::memory_order_acquire);
+        index_type frontPos = m_front.load(std::memory_order_acquire);
         index_type newFront = next_pos(frontPos);
 
         m_buffer[frontPos] = element;
@@ -103,10 +103,13 @@ namespace core {
 
     private:
         union index_descriptor {
-            index_descriptor(store_type num) : full(num) {}
-            index_descriptor(index_type back, index_type front) : half[0](back), half[1](front) {}
+
             std::atomic<store_type> full;
             std::array<std::atomic<index_type>, 2> half;
+
+            index_descriptor(store_type num) : full(num) {}
+            index_descriptor(index_type back, index_type front) : half[0](back), half[1](front) {}
+            
         };
 
 
@@ -152,7 +155,7 @@ namespace core {
 
             auto value = m_buffer[back];
 
-            if (m_positions.half[0].compare_exchange_strong(back, next_pos(back))) {
+            if (m_positions.half[0].compare_exchange_strong(back, next_pos(back), std::memory_order_release)) {
                 return value;
             }
         } 
