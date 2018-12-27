@@ -108,7 +108,7 @@ namespace core {
             std::array<std::atomic<index_type>, 2> half;
 
             index_descriptor(store_type num) : full(num) {}
-            index_descriptor(index_type back, index_type front) : half[0](back), half[1](front) {}
+            index_descriptor(index_type back, index_type front) : half{{back, front}} {}
             
         };
 
