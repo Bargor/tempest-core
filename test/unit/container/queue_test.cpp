@@ -189,6 +189,7 @@ TEST(spmc_queue, test_pop_fail) {
 
 TEST(spmc_queue, test_push_pop_interleaved) {
     constexpr std::int32_t size = 1023;
+    std::vector<std::int32_t> items(size, 0);
 
     spmc_queue<std::int32_t, size> queue;
 
@@ -203,6 +204,7 @@ TEST(spmc_queue, test_push_pop_interleaved) {
 
         for (std::int32_t i = 0; i < size; ++i) {
             EXPECT_TRUE(queue.try_push(i));
+            items[i] = 1;
         }
     };
 
@@ -216,6 +218,7 @@ TEST(spmc_queue, test_push_pop_interleaved) {
                 EXPECT_LE(last, res.value());
                 last = res.value();
                 count++;
+                items[last] = 2;
             }
         }
     };
@@ -229,10 +232,16 @@ TEST(spmc_queue, test_push_pop_interleaved) {
     producer.join();
     consumer_1.join();
     consumer_2.join();
+
+    for (auto i : items) {
+        EXPECT_EQ(i, 2);
+    }
 }
 
 TEST(spmc_queue, test_push_pop_interleaved_2) {
     constexpr std::int32_t size = 1023;
+    constexpr std::int32_t mult = 2;
+    std::vector<std::int32_t> items(size * mult, 0);
 
     spmc_queue<std::int32_t, size> queue;
 
@@ -245,9 +254,12 @@ TEST(spmc_queue, test_push_pop_interleaved_2) {
     auto push_queue = [&]() {
         notifier.wait();
 
-        while (count < 2 * size) {
+        while (count < mult * size) {
             auto res = queue.try_push(count);
-            if (res) ++count;
+            if (res) {
+                items[count] = 1;
+                ++count;
+            }
         }
     };
 
@@ -261,6 +273,7 @@ TEST(spmc_queue, test_push_pop_interleaved_2) {
                 EXPECT_LE(last, res.value());
                 last = res.value();
                 count++;
+                items[last] = 2;
             }
         }
     };
@@ -274,4 +287,8 @@ TEST(spmc_queue, test_push_pop_interleaved_2) {
     producer.join();
     consumer_1.join();
     consumer_2.join();
+
+    for (auto i : items) {
+        EXPECT_EQ(i, 2);
+    }
 }
