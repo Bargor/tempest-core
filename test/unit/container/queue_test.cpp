@@ -247,12 +247,14 @@ TEST(spmc_queue, test_push_pop_interleaved_2) {
 
     std::promise<void> enabler;
 
-    std::atomic<std::int32_t> count = 0;
+    std::atomic<std::int32_t> pop_count = 0;
 
     auto notifier = enabler.get_future().share();
 
     auto push_queue = [&]() {
         notifier.wait();
+
+        std::int32_t count = 0;
 
         while (count < mult * size) {
             auto res = queue.try_push(count);
@@ -267,12 +269,13 @@ TEST(spmc_queue, test_push_pop_interleaved_2) {
         notifier.wait();
 
         auto last = 0;
-        while (count < 2 * size) {
+
+        while (pop_count < 2 * size) {
             auto res = queue.try_pop();
             if (res) {
                 EXPECT_LE(last, res.value());
                 last = res.value();
-                count++;
+                pop_count++;
                 items[last] = 2;
             }
         }
