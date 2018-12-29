@@ -22,6 +22,8 @@ namespace core {
     public:
         spsc_queue() noexcept;
 
+        bool empty() noexcept;
+
         bool try_push(const T& element) noexcept;
         // This one has overwrite semantics when queue is full, will overwrite oldest item
         void push(const T& element) noexcept;
@@ -39,6 +41,14 @@ namespace core {
 
     template<typename T, size_t Size>
     TST_INLINE spsc_queue<T, Size>::spsc_queue() noexcept : m_front(0), m_back(0) {
+    }
+
+    template<typename T, size_t Size>
+    TST_INLINE bool spsc_queue<T, Size>::empty() noexcept {
+        index_type frontPos = m_front.load(std::memory_order_relaxed);
+        index_type backPos = m_back.load(std::memory_order_relaxed);
+
+        return backPos == frontPos;
     }
 
     template<typename T, size_t Size>
@@ -93,6 +103,8 @@ namespace core {
     public:
         spmc_queue() noexcept;
 
+        bool empty() noexcept;
+
         bool try_push(const T& element) noexcept;
         // This one has overwrite semantics when queue is full, will overwrite oldest item
         void push(const T& element) noexcept;
@@ -123,6 +135,14 @@ namespace core {
 
     template<typename T, size_t Size>
     TST_INLINE spmc_queue<T, Size>::spmc_queue() noexcept : m_positions(0) {
+    }
+
+    template<typename T, size_t Size>
+    TST_INLINE bool spmc_queue<T, Size>::empty() noexcept {
+        index_type front = get_high_bits<store_type, index_type>(positions);
+        index_type back = get_low_bits<store_type, index_type>(positions);
+
+        return front == back;
     }
 
     template<typename T, size_t Size>
