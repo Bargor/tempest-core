@@ -23,6 +23,26 @@ TEST(spsc_queue, test_push_than_pop) {
     }
 }
 
+TEST(spsc_queue, test_empty) {
+    constexpr std::int32_t size = 31;
+
+    spsc_queue<std::int32_t, size> queue;
+
+    EXPECT_TRUE(queue.empty());
+}
+
+TEST(spsc_queue, test_not_empty) {
+    constexpr std::int32_t size = 31;
+
+    spsc_queue<std::int32_t, size> queue;
+
+    EXPECT_TRUE(queue.empty());
+
+    queue.try_push(1);
+
+    EXPECT_FALSE(queue.empty());
+}
+
 TEST(spsc_queue, test_push_fail) {
     constexpr std::int32_t size = 31;
 
@@ -136,6 +156,26 @@ TEST(spsc_queue, test_push_pop_interleaved_2) {
 
     producer.join();
     consumer.join();
+}
+
+TEST(spmc_queue, test_empty) {
+    constexpr std::int32_t size = 31;
+
+    spmc_queue<std::int32_t, size> queue;
+
+    EXPECT_TRUE(queue.empty());
+}
+
+TEST(spmc_queue, test_not_empty) {
+    constexpr std::int32_t size = 31;
+
+    spmc_queue<std::int32_t, size> queue;
+
+    EXPECT_TRUE(queue.empty());
+
+    queue.try_push(1);
+
+    EXPECT_FALSE(queue.empty());
 }
 
 TEST(spmc_queue, test_push_than_pop) {

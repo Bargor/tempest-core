@@ -139,6 +139,7 @@ namespace core {
 
     template<typename T, size_t Size>
     TST_INLINE bool spmc_queue<T, Size>::empty() noexcept {
+        store_type positions = m_positions.full.load(std::memory_order_acquire);
         index_type front = get_high_bits<store_type, index_type>(positions);
         index_type back = get_low_bits<store_type, index_type>(positions);
 
