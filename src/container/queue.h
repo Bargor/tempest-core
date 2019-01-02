@@ -176,7 +176,7 @@ namespace core {
 
             auto value = m_buffer[back];
 
-            if (m_positions.half[0].compare_exchange_strong(back, next_pos(back), std::memory_order_release)) {
+            if (m_positions.half[0].compare_exchange_strong(back, next_pos(back), std::memory_order_acq_rel)) {
                 return value;
             }
         } 
