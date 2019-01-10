@@ -84,7 +84,7 @@ matrix:
             - llvm-7-runtime
       env:
         - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7" BUILD_TYPE=Debug
-        - EXTRA_FLAGS="-stdlib=libc++ -fsanitize=thread"
+        - EXTRA_FLAGS="-stdlib=libc++ -fsanitize=thread -O1"
     # Clang Release 
     - os: linux
       addons:
