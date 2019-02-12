@@ -1,7 +1,7 @@
 # This file is part of Tempest-engine-GL project
 # Author: Karol Kontny
 
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.13)
 
 project (Tempest-core CXX)
 

@@ -21,8 +21,6 @@ include(GatherTestSources.cmake)
 set(TEST_RUNNER test_runner.cpp)
 set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
 
-message(${TEST_CODE})
-
 source_group("tests" FILES ${TEST_SRCS})
 
 add_executable (core_test ${TEST_SRCS})
