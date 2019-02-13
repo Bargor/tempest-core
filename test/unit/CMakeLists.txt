@@ -15,11 +15,12 @@ set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
 set(TEST_CODE 
-    /container/queue_test.cpp
-	/memory/frame_allocator_test.cpp
-	/numeric/random_test.cpp
-	/time/timer_test.cpp
-	/util/bitpack_test.cpp)
+    container/queue_test.cpp
+	memory/frame_allocator_test.cpp
+	numeric/random_test.cpp
+	time/timer_test.cpp
+	util/bitpack_test.cpp
+)
 
 set(TEST_RUNNER test_runner.cpp)
 set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
