@@ -1,7 +1,7 @@
 # This file is part of Tempest-engine-GL project
 # Author: Karol Kontny
 
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.13)
 
 project (Tempest-core CXX)
 
@@ -17,11 +17,6 @@ message(${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}:${VERSION_REVISION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-option(BUILD_THREAD_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
-option(BUILD_ADDRESS_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
-option(BUILD_MEMORY_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
-option(BUILD_LEAK_SANITIZER "Run tests with thread sanitizer on Linux" OFF)
 
 #Compiler specific options
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
