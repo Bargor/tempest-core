@@ -3,6 +3,7 @@ set(${TEMPEST_CODE}
 	platform.h
 	macros.h
 	spinlock.h
+	common/position.h
 	container/queue.h
 	memory/frame_allocator.h
 	numeric/random.h
