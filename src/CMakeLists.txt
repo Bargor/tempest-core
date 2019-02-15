@@ -1,14 +1,13 @@
-set(${TEMPEST_CODE}
+set(TEMPEST_CODE
 	assert.h
 	platform.h
 	macros.h
-	spinlock.h
+	atomic/spinlock.h
 	container/queue.h
 	memory/frame_allocator.h
 	numeric/random.h
 	time/timer.h
 	util/variant.h
-	util/bitpack.h
 )
 
 add_library(core INTERFACE)
