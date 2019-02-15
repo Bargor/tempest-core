@@ -6,6 +6,7 @@ set(CORE_HDRS
 	assert.h
 	platform.h
 	macros.h
+	common/position.h
 	atomic/spinlock.h
 	container/queue.h
 	memory/frame_allocator.h
