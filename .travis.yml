@@ -106,6 +106,9 @@ matrix:
         
 before_install:
     - eval "${MATRIX_EVAL}"
+    - wget http://www.cmake.org/files/v3.13/cmake-3.13.0-Linux-x86_64.sh
+    - sudo sh cmake-3.13.0-Linux-x86_64.sh --skip-license --prefix=/usr
+    - export PATH=/usr/bin:$PATH
 # Build steps
 
 script:
