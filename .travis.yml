@@ -9,6 +9,7 @@ notifications:
 
 matrix:
   include:
+    # Debug
     - os: linux
       addons:
         apt:
@@ -19,6 +20,7 @@ matrix:
             - g++-8
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" BUILD_TYPE=Debug
+    # Relase    
     - os: linux
       addons:
         apt:
@@ -29,7 +31,7 @@ matrix:
             - g++-8
       env:
         - MATRIX_EVAL="CC=gcc-8 && CXX=g++-8" BUILD_TYPE=Release
-    # works on Trusty
+    # Clang Debug
     - os: linux
       addons:
         apt:
@@ -47,6 +49,7 @@ matrix:
       env:
         - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7" BUILD_TYPE=Debug
         - EXTRA_FLAGS="-stdlib=libc++"
+    # Clang Release
     - os: linux
       addons:
         apt:
@@ -64,8 +67,48 @@ matrix:
       env:
         - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7" BUILD_TYPE=Release
         - EXTRA_FLAGS="-stdlib=libc++"
+    # Clang Thread sanitizer
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+          packages:
+            - clang-7
+            - libc++-7-dev
+            - libc++abi-7-dev
+            - lld-7
+            - llvm-7
+            - llvm-7-dev
+            - llvm-7-runtime
+      env:
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7" BUILD_TYPE=Debug
+        - EXTRA_FLAGS="-stdlib=libc++ -fsanitize=thread"
+    # Clang Release 
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-xenial-7
+          packages:
+            - clang-7
+            - libc++-7-dev
+            - libc++abi-7-dev
+            - lld-7
+            - llvm-7
+            - llvm-7-dev
+            - llvm-7-runtime
+      env:
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7" BUILD_TYPE=Debug
+        - EXTRA_FLAGS="-stdlib=libc++ -fsanitize=address"
+        
 before_install:
     - eval "${MATRIX_EVAL}"
+    - wget http://www.cmake.org/files/v3.13/cmake-3.13.0-Linux-x86_64.sh
+    - sudo sh cmake-3.13.0-Linux-x86_64.sh --skip-license --prefix=/usr
+    - export PATH=/usr/bin:$PATH
 # Build steps
 
 script:
@@ -73,6 +116,9 @@ script:
 - clang --version
 - mkdir build
 - cd build
-- cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_CXX_FLAGS=${EXTRA_FLAGS}
+- cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_CXX_FLAGS="${EXTRA_FLAGS}" -DCORE_BUILD_TESTS=ON
 - make -j2
 - ./exe/core_test
+- if [ "${BUILD_TYPE}" == "Release" ]; then
+    ./exe/queue_test;
+  fi

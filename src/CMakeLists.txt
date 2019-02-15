@@ -1,14 +1,27 @@
-include(${CMAKE_SOURCE_DIR}/GatherSources.cmake)
+# This file is part of Tempest-core project
+# Author: Karol Kontny
+
+set(CORE_HDRS
+	core.h
+	assert.h
+	platform.h
+	macros.h
+	atomic/spinlock.h
+	container/queue.h
+	memory/frame_allocator.h
+	numeric/random.h
+	time/timer.h
+	util/variant.h
+)
 
 add_library(core INTERFACE)
-
 add_library(tst::core ALIAS core)
 
 target_include_directories(core INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(core INTERFACE ${TEMPEST_CODE})
+target_sources(core INTERFACE ${CORE_HDRS})
 
-source_group("core" FILES ${TEMPEST_CODE})
+source_group("core" FILES ${CORE_HDRS})
 
 target_link_libraries(core INTERFACE fmt::fmt)
 

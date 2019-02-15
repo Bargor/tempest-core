@@ -3,8 +3,6 @@
 
 enable_testing()
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/libs/googletest ${LIBRARY_OUTPUT_PATH})
-
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
     gmock_build_tests gtest_build_samples gtest_build_tests
@@ -25,8 +23,8 @@ set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
 
 source_group("tests" FILES ${TEST_SRCS})
 
-add_executable (core_test ${TEST_SRCS} ${TEMPEST_CODE})
-add_test(NAME unit_test COMMAND core_test)
+add_executable (core_test ${TEST_SRCS})
+add_test(NAME tst.core_unit_test COMMAND core_test)
 
 target_compile_definitions(core_test PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_COMPILE_DEFINITIONS}>")
 target_compile_definitions(core_test PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_COMPILE_DEFINITIONS}>")

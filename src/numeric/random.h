@@ -38,7 +38,7 @@ namespace core {
 
     constexpr cmwc_engine::complimentary_multiply_with_carry_engine(const std::uint32_t seed) noexcept
         : m_it(m_size - 1), m_c(362436), m_state({seed, seed + m_PHI, seed + m_PHI + m_PHI}) {
-        for (std::int32_t i = 3; i < m_size; i++)
+        for (std::uint32_t i = 3; i < m_size; i++)
             m_state[i] = m_state[i - 3] ^ m_state[i - 2] ^ m_PHI ^ i;
     }
 
@@ -68,7 +68,7 @@ namespace core {
         m_state[0] = seed;
         m_state[1] = seed + m_PHI;
         m_state[2] = seed + m_PHI + m_PHI;
-        for (std::int32_t i = 3; i < m_size; i++)
+        for (std::uint32_t i = 3; i < m_size; i++)
             m_state[i] = m_state[i - 3] ^ m_state[i - 2] ^ m_PHI ^ i;
     }
 
