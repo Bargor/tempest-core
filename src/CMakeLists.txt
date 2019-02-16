@@ -12,21 +12,21 @@ set(CORE_HDRS
 	memory/frame_allocator.h
 	numeric/random.h
 	time/timer.h
+	thread/main_thread.h
 	util/variant.h
 )
 
-add_library(core INTERFACE)
-add_library(tst::core ALIAS core)
+set(CORE_SRCS
+	thread/main_thread.cpp
+)
 
-target_include_directories(core INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+include(${PROJECT_SOURCE_DIR}/cmake/TstAddLibrary.cmake)
 
-target_sources(core INTERFACE ${CORE_HDRS})
+tst_add_library(core "${CORE_HDRS}" "${CORE_SRCS}")
 
-source_group("core" FILES ${CORE_HDRS})
-
-target_link_libraries(core INTERFACE fmt::fmt)
+target_link_libraries(core PUBLIC fmt::fmt)
 
 if(UNIX)
 	find_package(Threads)
-	target_link_libraries(core INTERFACE ${CMAKE_THREAD_LIBS_INIT})
+	target_link_libraries(core PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 endif(UNIX)
