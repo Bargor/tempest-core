@@ -4,6 +4,7 @@
 #pragma once
 
 #include <algorithm>
+#include <platform.h>
 
 // Workaround for GCC
 
