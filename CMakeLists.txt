@@ -1,4 +1,4 @@
-# This file is part of Tempest-engine-GL project
+# This file is part of Tempest-core project
 # Author: Karol Kontny
 
 cmake_minimum_required(VERSION 3.13)
