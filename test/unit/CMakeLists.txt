@@ -14,35 +14,23 @@ set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
-set(TEST_CODE 
-    container/queue_test.cpp
+set(TEST_SRCS 
+    test_runner.cpp
+	container/queue_test.cpp
 	memory/frame_allocator_test.cpp
 	numeric/random_test.cpp
 	time/timer_test.cpp
 	util/bitpack_test.cpp
 )
 
-set(TEST_RUNNER test_runner.cpp)
-set(TEST_SRCS ${TEST_RUNNER} ${TEST_CODE})
-
 source_group("tests" FILES ${TEST_SRCS})
 
-add_executable (core_test ${TEST_SRCS})
+include(${PROJECT_SOURCE_DIR}/cmake/TstAddLibrary.cmake)
+
+tst_add_executable (core_test "" "${TEST_SRCS}")
 add_test(NAME tst.core_unit_test COMMAND core_test)
 
-target_sources(core_test PUBLIC ${TEST_SRCS})
-
-target_compile_definitions(core_test PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_COMPILE_DEFINITIONS}>")
-target_compile_definitions(core_test PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_COMPILE_DEFINITIONS}>")
-target_compile_definitions(core_test PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEBINFO_COMPILE_DEFINITIONS}>")
-
-target_compile_options(core_test PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_COMPILE_OPTIONS}>")
-target_compile_options(core_test PRIVATE "$<$<CONFIG:RELEASE>:${RELEASE_COMPILE_OPTIONS}>")
-target_compile_options(core_test PRIVATE "$<$<CONFIG:RELWITHDEBINFO>:${RELWITHDEBINFO_COMPILE_OPTIONS}>")
-
-set_target_properties(core_test PROPERTIES LINK_FLAGS_RELEASE "${RELEASE_LINK_OPTIONS}" LINK_FLAGS_DEBUG "${DEBUG_LINK_OPTIONS}" LINKER_LANGUAGE CXX)
-
-target_link_libraries(core_test PRIVATE core gmock)
+target_link_libraries(core_test PRIVATE tst::core gmock)
 
 if(UNIX)
 	target_link_libraries(core_test PRIVATE gtest)
